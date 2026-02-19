@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using WebApplication1.Attribure;
 
 namespace WebApplication1.ViewModels
 {
@@ -17,10 +18,10 @@ namespace WebApplication1.ViewModels
         public string Author { get; set; }
         [Display(Name = "Жанр книги")]
         [Required(ErrorMessage = "Выберите жанр книги")]
-        public Genre Genre { get; set; }
+        public Genre? Genre { get; set; }
         [Display(Name = "Год издания книги" )]
         [Required(ErrorMessage = "Необходимо заполнить поле")]
-        [Range(0, int.MaxValue, ErrorMessage = "Год издания должен быть положительным числом")]
+        [YearRange(1600, ErrorMessage = "Год издания должен быть от 1600 до текущего года")]
         public int Year { get; set; }
 
     }
@@ -43,7 +44,5 @@ public enum Genre
 /*
 
 2) Создайте ViewModel «BookViewModel», который будет использоваться для передачи данных о книгах между контроллерами и представлениями. В этой ViewModel могут быть только те поля, которые необходимы для отображения и ввода пользователем, например, Title, Author, Genre, Year.
-
-
 
 */

@@ -42,7 +42,7 @@ public class BookController : Controller
             Id = Guid.NewGuid(),
             Title = model.Title,
             Author = model.Author,
-            Genre = model.Genre,
+            Genre = model!.Genre!.Value,
             Year = model.Year
         };
 
@@ -75,7 +75,7 @@ public class BookController : Controller
         {
             Title = model.Title,
             Author = model.Author,
-            Genre = model.Genre,
+            Genre = model!.Genre!.Value,
             Year = model.Year
         };
 
