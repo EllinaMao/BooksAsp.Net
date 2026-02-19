@@ -12,14 +12,28 @@ public class BookController : Controller
         _bookService = bookService;
     }
 
-    public IActionResult Index() => View(_bookService.GetBooks());
+    public IActionResult Index()
+    {
+        var books = _bookService.GetBooks();
+
+        var viewModel = books.Select(book => new BookViewModel
+        {
+            Id = book.Id,
+            Title = book.Title,
+            Author = book.Author,
+            Genre = book.Genre,
+            Year = book.Year
+        }).ToList();
+
+        return View(viewModel);
+    }
 
     [HttpGet]
-    public IActionResult Add() => View();
+    public IActionResult Create() => View(); 
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Add(BookViewModel model)
+    public IActionResult Create(BookViewModel model) 
     {
         if (!ModelState.IsValid) return View(model);
 
@@ -28,7 +42,7 @@ public class BookController : Controller
             Id = Guid.NewGuid(),
             Title = model.Title,
             Author = model.Author,
-            Genre = model.Genre, 
+            Genre = model.Genre,
             Year = model.Year
         };
 
@@ -36,11 +50,6 @@ public class BookController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    public IActionResult Delete(Guid id)
-    {
-        _bookService.RemoveBook(id);
-        return RedirectToAction(nameof(Index));
-    }
     public IActionResult Edit(Guid id)
     {
         var book = _bookService.GetBookById(id);
@@ -56,5 +65,42 @@ public class BookController : Controller
         return View(model);
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Edit(Guid id, BookViewModel model) 
+    {
+        if (!ModelState.IsValid) return View(model);
 
+        var updatedBook = new BookModel
+        {
+            Title = model.Title,
+            Author = model.Author,
+            Genre = model.Genre,
+            Year = model.Year
+        };
+
+        _bookService.UpdateBook(id, updatedBook); 
+        return RedirectToAction(nameof(Index));
+    }
+
+    public IActionResult Delete(Guid id)
+    {
+        _bookService.RemoveBook(id);
+        return RedirectToAction(nameof(Index));
+    }
+
+    public IActionResult Details(Guid id)
+    {
+        var book = _bookService.GetBookById(id);
+        if (book == null) return NotFound();
+        var model = new BookViewModel
+        {
+            Id = book.Id,
+            Title = book.Title,
+            Author = book.Author,
+            Genre = book.Genre,
+            Year = book.Year
+        };
+        return View(model);
+    }
 }

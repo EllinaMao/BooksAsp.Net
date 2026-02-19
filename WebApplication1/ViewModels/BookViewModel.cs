@@ -17,7 +17,7 @@ namespace WebApplication1.ViewModels
         public string Author { get; set; }
         [Display(Name = "Жанр книги")]
         [Required(ErrorMessage = "Выберите жанр книги")]
-        public string Genre { get; set; }
+        public Genre Genre { get; set; }
         [Display(Name = "Год издания книги" )]
         [Required(ErrorMessage = "Необходимо заполнить поле")]
         [Range(0, int.MaxValue, ErrorMessage = "Год издания должен быть положительным числом")]
